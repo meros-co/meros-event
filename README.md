@@ -1,17 +1,18 @@
 # Meros Event (Go)
 
-The shared Go emitter for the **Meros event envelope (v1)** — every Meros Go product
-(Sluice first) uses it to emit events to a collector (a local Imperio, the Meros
-cloud, both, or neither). Stdlib-only, dependency-free.
+The Go emitter for the **Meros event envelope (v1)** — Meros Go products use it to
+emit events to a collector (a local Imperio, the Meros cloud, both, or neither).
+Stdlib-only, dependency-free.
 
 - **Module:** `github.com/meros-co/meros-event`
-- **Package identifier:** `merosevent` (Go identifiers can't contain a hyphen, so the
-  import path is `meros-event` but the package you reference is `merosevent`)
+- **Package:** `merosevent` (Go identifiers can't contain a hyphen, so the import path
+  is `meros-event` but the package you reference is `merosevent`)
 
-> **Status:** this directory is the source for the **public** `meros-co/meros-event`
-> repository, which is being created (public because open-source products import it —
-> no auth needed). Until it is published + tagged, vendor these files; after that,
-> `go get github.com/meros-co/meros-event@<tag>`.
+## Install
+
+```sh
+go get github.com/meros-co/meros-event
+```
 
 ## Use
 
@@ -37,15 +38,19 @@ e.Emit("sluice.route.media_lost", merosevent.Error,
   **zero collectors is a valid no-op.**
 - Optional fields (`seq`, `subject`, `actor`, `attrs`, `trace`) are omitted when unset.
 
-## Contract
+## Envelope contract
 
-The envelope this produces validates against the Meros event envelope JSON Schema
-(`spec/schema/event-envelope-1.json` in the meros repo) — the conformance authority.
-Keep this module's version in step with the envelope version it targets (currently
-`envelope: 1`).
+Each event is a flat JSON object with a fixed set of keys — `envelope`, `id` (ULID),
+`occurred_at`, `source{product,version,instance,…}`, `type` (`product.subject.verb`),
+`severity`, and optional `seq`/`subject`/`actor`/`attrs`/`trace`. This module
+implements version `1`; keep it in step with the envelope version you target.
 
 ## Test
 
 ```sh
 go test ./...
 ```
+
+## License
+
+MIT — see [LICENSE](LICENSE).
